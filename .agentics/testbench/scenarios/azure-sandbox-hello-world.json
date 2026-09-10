@@ -29,7 +29,7 @@
               "type": "tool_use",
               "name": "$toolMatching:Bash",
               "input": {
-                "command": "sleep 2 && curl -fsS \"$AGENTICS_BASE_URL/api/owners/$AGENTICS_OWNER/projects/$AGENTICS_PROJECT/jobs/$AGENTICS_JOB_ID\" > /tmp/agentics-job.json && node -e 'const j=require(\"/tmp/agentics-job.json\"); console.log(JSON.stringify({job:j.id,station:j.agentDefinition.columnId,task:j.agentDefinition.taskId},null,2))' && git status --short",
+                "command": "sleep 2 && curl -fsS \"$AGENTICS_BASE_URL/api/owners/$AGENTICS_OWNER/projects/$AGENTICS_PROJECT_NAME/jobs/$AGENTICS_JOB_ID\" > /tmp/agentics-job.json && node -e 'const j=require(\"/tmp/agentics-job.json\"); console.log(JSON.stringify({job:j.id,station:j.agentDefinition.columnId,task:j.agentDefinition.taskId},null,2))' && git status --short",
                 "description": "Inspect the station job and repository"
               }
             }
@@ -88,7 +88,7 @@
               "type": "tool_use",
               "name": "$toolMatching:Bash",
               "input": {
-                "command": "sleep 2 && node -e 'const fs=require(\"fs\"); const j=require(\"/tmp/agentics-job.json\"); const station=j.agentDefinition.columnId; fs.writeFileSync(\"/tmp/delivery-artifact.json\",JSON.stringify({type:\"delivery\",name:`Azure Sandbox demo — ${station}`,description:`Deterministic output from the ${station} station`,taskId:j.agentDefinition.taskId,assemblyLineId:j.agentDefinition.assemblyLineId,streamId:process.env.VIBECAST_SESSION_ID,data:{summary:`The ${station} station ran inside its own Azure Container Apps Sandbox, used the Vibecast MCP server, modified the shared Git repository, and published this artifact.`,station,status:\"passed\",runtime:\"azure-sandbox-devcontainer\",testResults:{passed:1,failed:0,details:\"Deterministic acceptance fixture completed\"}}}))' && curl -fsS -X POST \"$AGENTICS_BASE_URL/api/owners/$AGENTICS_OWNER/projects/$AGENTICS_PROJECT/artifacts\" -H \"Authorization: Bearer $AGENTICS_TOKEN\" -H 'Content-Type: application/json' -d @/tmp/delivery-artifact.json",
+                "command": "sleep 2 && node -e 'const fs=require(\"fs\"); const j=require(\"/tmp/agentics-job.json\"); const station=j.agentDefinition.columnId; fs.writeFileSync(\"/tmp/delivery-artifact.json\",JSON.stringify({type:\"delivery\",name:`Azure Sandbox demo — ${station}`,description:`Deterministic output from the ${station} station`,taskId:j.agentDefinition.taskId,assemblyLineId:j.agentDefinition.assemblyLineId,streamId:process.env.VIBECAST_SESSION_ID,data:{summary:`The ${station} station ran inside its own Azure Container Apps Sandbox, used the Vibecast MCP server, modified the shared Git repository, and published this artifact.`,station,status:\"passed\",runtime:\"azure-sandbox-devcontainer\",testResults:{passed:1,failed:0,details:\"Deterministic acceptance fixture completed\"}}}))' && curl -fsS -X POST \"$AGENTICS_BASE_URL/api/owners/$AGENTICS_OWNER/projects/$AGENTICS_PROJECT_NAME/artifacts\" -H \"Authorization: Bearer $AGENTICS_TOKEN\" -H 'Content-Type: application/json' -d @/tmp/delivery-artifact.json",
                 "description": "Publish the station delivery artifact"
               }
             }
