@@ -1,0 +1,8 @@
+{
+  "id": "smoke",
+  "name": "Sandbox smoke test",
+  "trigger": {
+    "type": "dispatch_worker",
+    "autoGit": true
+  }
+}

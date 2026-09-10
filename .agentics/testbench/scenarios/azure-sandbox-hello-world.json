@@ -1,0 +1,77 @@
+{
+  "name": "azure-sandbox-hello-world",
+  "description": "Creates and commits the deterministic Azure Sandbox acceptance artifact, then completes the station.",
+  "onExhausted": "error",
+  "steps": [
+    {
+      "match": {
+        "requestIndex": 0
+      },
+      "response": {
+        "message": {
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "Create the exact acceptance artifact and commit it from the station workspace."
+            },
+            {
+              "type": "text",
+              "text": "Creating and committing the deterministic acceptance artifact."
+            },
+            {
+              "type": "tool_use",
+              "name": "$toolMatching:Bash",
+              "input": {
+                "command": "printf 'agentics-azure-sandboxes: ok\\nexecution: sandbox-devcontainer\\n' > RESULT.md && git add RESULT.md && git -c user.name='Agentics Testbench' -c user.email='testbench@agentics.local' commit -m 'test: complete Azure Sandbox acceptance fixture'",
+                "description": "Create and commit the deterministic acceptance artifact"
+              }
+            }
+          ],
+          "stopReason": "tool_use",
+          "chunkSize": 24,
+          "delayMs": 80
+        }
+      }
+    },
+    {
+      "match": {
+        "requestIndex": 1
+      },
+      "response": {
+        "message": {
+          "content": [
+            {
+              "type": "text",
+              "text": "The acceptance artifact is committed. Completing the station successfully."
+            },
+            {
+              "type": "tool_use",
+              "name": "$toolMatching:stop_broadcast",
+              "input": {
+                "message": "Created and committed RESULT.md using the repository-owned deterministic model fixture.",
+                "conclusion": "success"
+              }
+            }
+          ],
+          "stopReason": "tool_use",
+          "chunkSize": 24,
+          "delayMs": 80
+        }
+      }
+    },
+    {
+      "repeat": -1,
+      "response": {
+        "message": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Acceptance fixture completed."
+            }
+          ],
+          "stopReason": "end_turn"
+        }
+      }
+    }
+  ]
+}

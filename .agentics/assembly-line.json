@@ -1,0 +1,9 @@
+{
+  "name": "Azure Sandbox smoke test",
+  "description": "A deterministic end-to-end acceptance line for Agentics, Azure Container Apps Sandboxes, Docker/devcontainers, Vibecast, and Claude Code.",
+  "version": "0.2.0",
+  "testbench": {
+    "mode": "scenario",
+    "scenario": "azure-sandbox-hello-world"
+  }
+}

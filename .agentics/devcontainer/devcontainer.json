@@ -1,0 +1,11 @@
+{
+  "name": "Agentics Azure Sandbox smoke test",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "remoteUser": "node",
+  "containerEnv": {
+    "NPM_CONFIG_STRICT_SSL": "false",
+    "NODE_TLS_REJECT_UNAUTHORIZED": "0"
+  }
+}

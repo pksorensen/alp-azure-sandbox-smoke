@@ -1,0 +1,13 @@
+{
+  "task": {
+    "conclusion": "success",
+    "settled": true
+  },
+  "repository": {
+    "clean": true,
+    "files": {
+      "RESULT.md": "agentics-azure-sandboxes: ok\nexecution: sandbox-devcontainer\n"
+    },
+    "commitSubject": "test: complete Azure Sandbox acceptance fixture"
+  }
+}

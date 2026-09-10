@@ -1,0 +1,6 @@
+{
+  "createTask": {
+    "title": "Run the Azure Sandbox smoke test",
+    "description": "Create the exact RESULT.md requested by the smoke station and report success."
+  }
+}
