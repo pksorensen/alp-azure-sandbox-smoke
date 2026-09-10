@@ -22,7 +22,7 @@
               "type": "tool_use",
               "name": "$toolMatching:Bash",
               "input": {
-                "command": "printf 'agentics-azure-sandboxes: ok\\nexecution: sandbox-devcontainer\\n' > RESULT.md && git add RESULT.md && git -c user.name='Agentics Testbench' -c user.email='testbench@agentics.local' commit -m 'test: complete Azure Sandbox acceptance fixture'",
+                "command": "printf 'agentics-azure-sandboxes: ok\\nexecution: sandbox-devcontainer\\n' > RESULT.md && git add RESULT.md .devcontainer/Dockerfile .devcontainer/devcontainer.json && (git diff --cached --quiet || git -c user.name='Agentics Testbench' -c user.email='testbench@agentics.local' commit -m 'test: complete Azure Sandbox acceptance fixture')",
                 "description": "Create and commit the deterministic acceptance artifact"
               }
             }
