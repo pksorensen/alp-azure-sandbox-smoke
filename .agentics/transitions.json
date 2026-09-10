@@ -1,1 +1,4 @@
-[]
+[
+  { "from": "plan", "to": "build", "condition": "success" },
+  { "from": "build", "to": "verify", "condition": "success" }
+]

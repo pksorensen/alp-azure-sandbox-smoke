@@ -1,6 +1,6 @@
 {
-  "id": "smoke",
-  "name": "Sandbox smoke test",
+  "id": "plan",
+  "name": "Plan",
   "trigger": {
     "type": "dispatch_worker",
     "autoGit": true

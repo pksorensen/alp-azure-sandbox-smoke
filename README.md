@@ -1,18 +1,19 @@
-# Agentics Azure Sandbox smoke assembly line
+# Azure Sandbox smoke assembly line
 
-This public ALP fixture proves the complete execution path without spending a
-real model token:
+Import this directory as an Agentics assembly line. It has three sequential
+stations — Plan, Build, and Verify — and remains intentionally small enough for
+the deterministic Claude gateway emulator.
 
-1. import the repository into Agentics;
-2. dispatch its kickoff task;
-3. let the managed runner create one Azure Container Apps Sandbox;
-4. start Docker and the repository devcontainer inside that Sandbox;
-5. run real Claude Code and Vibecast against the repository-owned deterministic
-   Anthropic scenario;
-6. create and commit `RESULT.md`;
-7. settle the Agentics task successfully and delete the Sandbox.
+The model fixture lives beside the line under
+`.agentics/testbench/scenarios/azure-sandbox-hello-world.json`. Importing the
+line carries that fixture into each dispatched Job; a simulation-enabled runner
+registers it with its gateway and selects it only for that Job.
 
-The model scenario is stored at
-`.agentics/testbench/scenarios/azure-sandbox-hello-world.json`. The deployed
-Sandbox controller content-addresses and registers it for only the dispatched
-job, so ordinary assembly lines continue to use their configured model provider.
+Acceptance requires all of the following:
+
+1. the Azure controller discovers or receives the project;
+2. a Sandbox is created for the station job;
+3. Docker and the devcontainer start inside the Sandbox;
+4. the runner reaches the configured gateway and completes all three jobs;
+5. `RESULT.md` is committed with the expected content;
+6. the Sandbox is deleted after completion.
