@@ -29,7 +29,7 @@
               "type": "tool_use",
               "name": "$toolMatching:Bash",
               "input": {
-                "command": "sleep 2 && curl -fsS \"$AGENTICS_BASE_URL/api/owners/$AGENTICS_OWNER/projects/$AGENTICS_PROJECT_NAME/jobs/$AGENTICS_JOB_ID\" > /tmp/agentics-job.json && node -e 'const j=require(\"/tmp/agentics-job.json\"); console.log(JSON.stringify({job:j.id,station:j.agentDefinition.columnId,task:j.agentDefinition.taskId},null,2))' && git status --short",
+                "command": "sleep 2 && curl -fsS \"$AGENTICS_BASE_URL/api/owners/$AGENTICS_OWNER/projects/$AGENTICS_PROJECT_NAME/runs\" > /tmp/agentics-runs.json && node -e 'const fs=require(\"fs\"); const runs=require(\"/tmp/agentics-runs.json\"); const run=runs.find(r=>r.jobs?.includes(process.env.AGENTICS_JOB_ID)); if(!run) throw new Error(\"Current run not found\"); const j={id:process.env.AGENTICS_JOB_ID,agentDefinition:run.agentDefinition}; fs.writeFileSync(\"/tmp/agentics-job.json\",JSON.stringify(j)); console.log(JSON.stringify({job:j.id,station:j.agentDefinition.columnId,task:j.agentDefinition.taskId},null,2))' && git status --short",
                 "description": "Inspect the station job and repository"
               }
             }
