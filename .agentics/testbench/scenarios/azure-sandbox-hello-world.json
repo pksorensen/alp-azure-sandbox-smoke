@@ -1,61 +1,115 @@
 {
   "name": "azure-sandbox-hello-world",
-  "description": "Creates and commits the deterministic Azure Sandbox acceptance artifact, then completes the station.",
+  "description": "A paced, deterministic demo that exercises MCP, shell tools, Git, repository reads, and Agentics artifact publishing.",
   "onExhausted": "error",
   "steps": [
     {
-      "match": {
-        "requestIndex": 0
-      },
+      "match": { "requestIndex": 0 },
       "response": {
         "message": {
           "content": [
-            {
-              "type": "thinking",
-              "thinking": "Create the exact acceptance artifact and commit it from the station workspace."
-            },
-            {
-              "type": "text",
-              "text": "Creating and committing the deterministic acceptance artifact."
-            },
-            {
-              "type": "tool_use",
-              "name": "$toolMatching:Bash",
-              "input": {
-                "command": "printf 'agentics-azure-sandboxes: ok\\nexecution: sandbox-devcontainer\\n' > RESULT.md && git add RESULT.md .devcontainer/Dockerfile .devcontainer/devcontainer.json && (git diff --cached --quiet || git -c user.name='Agentics Testbench' -c user.email='testbench@agentics.local' commit -m 'test: complete Azure Sandbox acceptance fixture')",
-                "description": "Create and commit the deterministic acceptance artifact"
-              }
-            }
+            { "type": "thinking", "thinking": "First I will inspect the live Vibecast session so the demonstration proves that MCP tools are connected." },
+            { "type": "text", "text": "I’ll begin by checking the live broadcast and sandbox session." },
+            { "type": "tool_use", "name": "$toolMatching:get_broadcast_status", "input": {} }
           ],
           "stopReason": "tool_use",
-          "chunkSize": 24,
-          "delayMs": 80
+          "chunkSize": 8,
+          "delayMs": 140
         }
       }
     },
     {
-      "match": {
-        "requestIndex": 1
-      },
+      "match": { "requestIndex": 1 },
       "response": {
         "message": {
           "content": [
-            {
-              "type": "text",
-              "text": "The acceptance artifact is committed. Completing the station successfully."
-            },
+            { "type": "thinking", "thinking": "The session is live. I will inspect the assigned job and working tree before producing this station's deliverable." },
+            { "type": "text", "text": "The MCP connection is healthy. Now I’m inspecting the job context and repository state." },
             {
               "type": "tool_use",
-              "name": "$toolMatching:stop_broadcast",
+              "name": "$toolMatching:Bash",
               "input": {
-                "message": "Created and committed RESULT.md using the repository-owned deterministic model fixture.",
-                "conclusion": "success"
+                "command": "sleep 2 && curl -fsS \"$AGENTICS_BASE_URL/api/owners/$AGENTICS_OWNER/projects/$AGENTICS_PROJECT/jobs/$AGENTICS_JOB_ID\" > /tmp/agentics-job.json && node -e 'const j=require(\"/tmp/agentics-job.json\"); console.log(JSON.stringify({job:j.id,station:j.agentDefinition.columnId,task:j.agentDefinition.taskId},null,2))' && git status --short",
+                "description": "Inspect the station job and repository"
               }
             }
           ],
           "stopReason": "tool_use",
-          "chunkSize": 24,
-          "delayMs": 80
+          "chunkSize": 8,
+          "delayMs": 140
+        }
+      }
+    },
+    {
+      "match": { "requestIndex": 2 },
+      "response": {
+        "message": {
+          "content": [
+            { "type": "thinking", "thinking": "I will create a station-specific proof file, update the shared result, and commit all expected changes so the automatic Git guard can pass." },
+            { "type": "text", "text": "Creating the station deliverable and committing it to the shared project repository." },
+            {
+              "type": "tool_use",
+              "name": "$toolMatching:Bash",
+              "input": {
+                "command": "sleep 2 && station=$(node -p 'require(\"/tmp/agentics-job.json\").agentDefinition.columnId') && mkdir -p demo-artifacts && printf '# Azure Sandbox station\\n\\nStation: %s\\nStatus: completed\\nRuntime: isolated sandbox + devcontainer\\n' \"$station\" > \"demo-artifacts/$station.md\" && printf 'agentics-azure-sandboxes: ok\\nexecution: sandbox-devcontainer\\n' > RESULT.md && git add RESULT.md demo-artifacts .devcontainer/Dockerfile .devcontainer/devcontainer.json && (git diff --cached --quiet || git -c user.name='Agentics Testbench' -c user.email='testbench@agentics.local' commit -m \"demo($station): complete sandbox station\")",
+                "description": "Create and commit the station deliverable"
+              }
+            }
+          ],
+          "stopReason": "tool_use",
+          "chunkSize": 8,
+          "delayMs": 140
+        }
+      }
+    },
+    {
+      "match": { "requestIndex": 3 },
+      "response": {
+        "message": {
+          "content": [
+            { "type": "thinking", "thinking": "The repository is committed. I will read the shared result back as visible verification." },
+            { "type": "text", "text": "The commit is complete. I’m reading the acceptance result back from the workspace." },
+            { "type": "tool_use", "name": "$toolMatching:Read", "input": { "file_path": "RESULT.md" } }
+          ],
+          "stopReason": "tool_use",
+          "chunkSize": 8,
+          "delayMs": 140
+        }
+      }
+    },
+    {
+      "match": { "requestIndex": 4 },
+      "response": {
+        "message": {
+          "content": [
+            { "type": "thinking", "thinking": "The result is correct. I will now publish a durable delivery artifact to the Agentics project." },
+            { "type": "text", "text": "Publishing a delivery artifact with the station result and execution details." },
+            {
+              "type": "tool_use",
+              "name": "$toolMatching:Bash",
+              "input": {
+                "command": "sleep 2 && node -e 'const fs=require(\"fs\"); const j=require(\"/tmp/agentics-job.json\"); const station=j.agentDefinition.columnId; fs.writeFileSync(\"/tmp/delivery-artifact.json\",JSON.stringify({type:\"delivery\",name:`Azure Sandbox demo — ${station}`,description:`Deterministic output from the ${station} station`,taskId:j.agentDefinition.taskId,assemblyLineId:j.agentDefinition.assemblyLineId,streamId:process.env.VIBECAST_SESSION_ID,data:{summary:`The ${station} station ran inside its own Azure Container Apps Sandbox, used the Vibecast MCP server, modified the shared Git repository, and published this artifact.`,station,status:\"passed\",runtime:\"azure-sandbox-devcontainer\",testResults:{passed:1,failed:0,details:\"Deterministic acceptance fixture completed\"}}}))' && curl -fsS -X POST \"$AGENTICS_BASE_URL/api/owners/$AGENTICS_OWNER/projects/$AGENTICS_PROJECT/artifacts\" -H \"Authorization: Bearer $AGENTICS_TOKEN\" -H 'Content-Type: application/json' -d @/tmp/delivery-artifact.json",
+                "description": "Publish the station delivery artifact"
+              }
+            }
+          ],
+          "stopReason": "tool_use",
+          "chunkSize": 8,
+          "delayMs": 140
+        }
+      }
+    },
+    {
+      "match": { "requestIndex": 5 },
+      "response": {
+        "message": {
+          "content": [
+            { "type": "text", "text": "The station deliverable is committed and its Agentics artifact is published. Completing this station successfully." },
+            { "type": "tool_use", "name": "$toolMatching:stop_broadcast", "input": { "message": "Completed the sandbox station, committed its proof file, and published a delivery artifact.", "conclusion": "success" } }
+          ],
+          "stopReason": "tool_use",
+          "chunkSize": 8,
+          "delayMs": 140
         }
       }
     },
@@ -63,12 +117,7 @@
       "repeat": -1,
       "response": {
         "message": {
-          "content": [
-            {
-              "type": "text",
-              "text": "Acceptance fixture completed."
-            }
-          ],
+          "content": [{ "type": "text", "text": "The station is complete and the delivery artifact has been published." }],
           "stopReason": "end_turn"
         }
       }

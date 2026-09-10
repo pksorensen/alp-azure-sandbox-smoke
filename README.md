@@ -9,6 +9,11 @@ The model fixture lives beside the line under
 line carries that fixture into each dispatched Job; a simulation-enabled runner
 registers it with its gateway and selects it only for that Job.
 
+Each station deliberately takes several visible steps: it checks the Vibecast
+MCP session, inspects its job and Git workspace, creates and reads a committed
+proof file, publishes a delivery artifact to Agentics, and finally calls the
+Vibecast `stop_broadcast` MCP tool.
+
 Acceptance requires all of the following:
 
 1. the Azure controller discovers or receives the project;

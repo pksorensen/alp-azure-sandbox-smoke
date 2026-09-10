@@ -3,6 +3,7 @@
   "name": "Build",
   "trigger": {
     "type": "dispatch_worker",
-    "autoGit": true
+    "autoGit": true,
+    "produceArtifact": true
   }
 }
