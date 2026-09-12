@@ -1,9 +1,6 @@
 {
-  "name": "Azure Sandbox smoke test",
-  "description": "A three-station acceptance line that demonstrates Plan, Build, and Verify running sequentially in isolated Azure Sandboxes.",
-  "version": "0.3.0",
-  "testbench": {
-    "mode": "scenario",
-    "scenario": "azure-sandbox-hello-world"
-  }
+  "name": "Azure Sandbox Codex + Luna",
+  "description": "A three-station live demo where Codex runs through Vibecast in isolated Azure Sandboxes and calls customer-owned Azure AI Foundry through managed identity.",
+  "version": "0.4.0",
+  "agent": "codex"
 }
