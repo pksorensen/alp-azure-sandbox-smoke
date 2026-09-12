@@ -1,9 +1,6 @@
 {
   "id": "build",
   "name": "Build",
-  "trigger": {
-    "type": "dispatch_worker",
-    "autoGit": true,
-    "produceArtifact": true
-  }
+  "operatorConfig": { "agent": "codex", "model": "gpt-5.6-luna", "effort": "medium" },
+  "trigger": { "type": "dispatch_worker", "autoGit": true, "produceArtifact": true }
 }
